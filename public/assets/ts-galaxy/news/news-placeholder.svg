@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="newsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#111827"/>
+      <stop offset="60%" stop-color="#7F1D1D"/>
+      <stop offset="100%" stop-color="#CC1100"/>
+    </linearGradient>
+    <!-- Subtle diagonal pattern -->
+    <pattern id="newsPattern" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="40" x2="40" y2="0" stroke="white" stroke-width="0.4" opacity="0.06"/>
+    </pattern>
+  </defs>
+  <rect width="800" height="450" fill="url(#newsBg)"/>
+  <rect width="800" height="450" fill="url(#newsPattern)"/>
+
+  <!-- Large faded badge watermark -->
+  <!-- Outer ring -->
+  <circle cx="400" cy="225" r="160" fill="none" stroke="white" stroke-width="2" opacity="0.06"/>
+  <circle cx="400" cy="225" r="148" fill="white" opacity="0.04"/>
+
+  <!-- Rocket silhouette (large, faded) -->
+  <polygon points="400,100  368,158  432,158" fill="white" opacity="0.1"/>
+  <rect x="368" y="156" width="64" height="88" rx="32" fill="white" opacity="0.1"/>
+  <polygon points="368,218  332,275  368,255" fill="white" opacity="0.08"/>
+  <polygon points="432,218  468,275  432,255" fill="white" opacity="0.08"/>
+  <path d="M 376,244 Q 400,298 424,244 Q 412,274 400,264 Q 388,274 376,244Z" fill="white" opacity="0.08"/>
+
+  <!-- "TS GALAXY FC" watermark text -->
+  <text x="400" y="360"
+        text-anchor="middle"
+        fill="white"
+        opacity="0.12"
+        font-family="'Arial Black',Arial,Impact,sans-serif"
+        font-size="32"
+        font-weight="900"
+        letter-spacing="6">TS GALAXY FC</text>
+</svg>
