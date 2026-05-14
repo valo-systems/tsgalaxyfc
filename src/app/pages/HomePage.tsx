@@ -1,10 +1,11 @@
 import {
   ChevronRight, Clock, MapPin, Star,
   Ticket, Calendar, ShoppingBag, CreditCard,
+  Trophy, BarChart2, TrendingUp,
 } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { LOGO, OPPONENT_BADGES, THE_CLUB_IMAGES, QUEENS_IMAGES, ACADEMY_IMAGES } from '@/lib/assets';
+import { LOGO, THE_CLUB_IMAGES, QUEENS_IMAGES, ACADEMY_IMAGES } from '@/lib/assets';
 import { HOME_PRODUCTS } from '@/lib/shop-data';
 import { homeNewsArticles, featuredNewsArticle } from '@/lib/news-data';
 import { FeaturedNewsCard, NewsCardCompact } from '@/app/components/NewsCard';
@@ -457,51 +458,139 @@ export function HomePage() {
         className="container mx-auto px-4 lg:px-6 mt-5 lg:mt-8 grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4"
         aria-label="Club statistics"
       >
-        {/* Last result */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 lg:p-5">
-          <p className="text-[10px] font-black text-gray-400 mb-3 uppercase tracking-widest">Last Result</p>
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-xs font-semibold text-gray-700 truncate">TS Galaxy</span>
-              <span className={`text-xl font-black flex-shrink-0 ${rm.colour}`}>{tsgScore}</span>
-            </div>
-            <div className="flex items-center justify-between gap-1">
-              <span className="text-xs font-semibold text-gray-700 truncate">{lastOpponent?.shortName ?? '—'}</span>
-              <span className="text-xl font-black text-gray-300 flex-shrink-0">{oppScore}</span>
-            </div>
-          </div>
-          <p className={`text-[10px] font-black mt-2.5 ${rm.colour}`}>
-            Full Time · {rm.label}
-          </p>
-        </div>
+        {/* ── Card 1: Last Result — dark mini scoreboard ── */}
+        <div
+          className="relative rounded-xl overflow-hidden shadow-md"
+          style={{ background: 'linear-gradient(135deg, #111827 0%, #1f0a0a 60%, #7f1d1d 100%)' }}
+        >
+          {/* Red top accent line */}
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-red-600" />
 
-        {/* League position */}
-        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-4 lg:p-5 text-center">
-          <p className="text-[10px] font-black text-gray-400 mb-1.5 uppercase tracking-widest">Position</p>
-          <div className="flex items-end justify-center gap-0.5">
-            <span className="text-4xl lg:text-5xl font-black text-red-600 leading-none">{tsGalaxyStanding.position}</span>
-            <span className="text-sm font-black text-red-400 mb-1">
-              {tsGalaxyStanding.position === 1 ? 'st' : tsGalaxyStanding.position === 2 ? 'nd' : tsGalaxyStanding.position === 3 ? 'rd' : 'th'}
+          {/* Badge watermark */}
+          <img
+            src={LOGO.badge}
+            alt=""
+            aria-hidden="true"
+            className="absolute -right-4 -bottom-4 w-24 h-24 opacity-[0.07] pointer-events-none select-none"
+          />
+
+          <div className="relative p-4 lg:p-5">
+            {/* Label row */}
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[9px] font-black text-red-400 uppercase tracking-widest flex items-center gap-1">
+                <Trophy className="w-2.5 h-2.5" aria-hidden="true" />
+                Last Result
+              </span>
+              {/* Full Time pill */}
+              <span className="text-[9px] font-bold text-gray-400 bg-white/10 px-1.5 py-0.5 rounded-full">Full Time</span>
+            </div>
+
+            {/* Scoreline */}
+            <div className="space-y-1.5 mb-3">
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-bold text-white/90 truncate leading-tight">TS Galaxy</span>
+                <span className={`text-2xl font-black flex-shrink-0 leading-none ${rm.colour}`}>{tsgScore}</span>
+              </div>
+              <div className="h-px bg-white/10" />
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-xs font-semibold text-white/60 truncate leading-tight">{lastOpponent?.shortName ?? '—'}</span>
+                <span className="text-2xl font-black text-white/30 flex-shrink-0 leading-none">{oppScore}</span>
+              </div>
+            </div>
+
+            {/* Result badge */}
+            <span
+              className={`inline-flex items-center text-[10px] font-black px-2 py-0.5 rounded-full ${
+                lastResult === 'W'
+                  ? 'bg-emerald-500/20 text-emerald-400 ring-1 ring-emerald-500/40'
+                  : lastResult === 'D'
+                  ? 'bg-amber-500/20 text-amber-400 ring-1 ring-amber-500/40'
+                  : 'bg-red-500/20 text-red-400 ring-1 ring-red-500/40'
+              }`}
+            >
+              {rm.label}
             </span>
           </div>
-          <p className="text-[10px] text-gray-400 mt-1.5">Betway Premiership</p>
         </div>
 
-        {/* Points + form — desktop only */}
-        <div className="hidden lg:block bg-white rounded-xl border border-gray-100 shadow-sm p-5">
-          <p className="text-xs font-black text-gray-400 mb-2 uppercase tracking-widest">Points</p>
-          <p className="text-5xl font-black text-gray-900 leading-none mb-2">{tsGalaxyStanding.points}</p>
-          <p className="text-xs text-gray-400 mb-3">After {tsGalaxyStanding.played} games</p>
-          <div className="flex gap-1.5" aria-label="Recent form">
-            {(tsGalaxyStanding.form ?? []).map((r, i) => (
-              <span
-                key={i}
-                aria-label={r === 'W' ? 'Win' : r === 'D' ? 'Draw' : 'Loss'}
-                className={`w-6 h-6 rounded-full text-[10px] font-black flex items-center justify-center text-white ${RESULT_META[r as FormResult].ring}`}
-              >
-                {r}
+        {/* ── Card 2: League Position — premium light stat card ── */}
+        <div className="relative bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+          {/* Red left accent bar */}
+          <div className="absolute top-0 left-0 bottom-0 w-[3px] bg-red-600 rounded-l-xl" />
+
+          {/* Badge watermark */}
+          <img
+            src={LOGO.badge}
+            alt=""
+            aria-hidden="true"
+            className="absolute -right-3 -bottom-3 w-20 h-20 opacity-[0.05] pointer-events-none select-none"
+          />
+
+          <div className="relative pl-5 pr-4 py-4 lg:py-5 text-center">
+            <div className="flex items-center justify-center gap-1 mb-1">
+              <BarChart2 className="w-2.5 h-2.5 text-red-400" aria-hidden="true" />
+              <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">League Position</span>
+            </div>
+
+            <div className="flex items-end justify-center gap-0.5 my-1.5">
+              <span className="text-4xl lg:text-5xl font-black text-red-600 leading-none">{tsGalaxyStanding.position}</span>
+              <span className="text-sm font-black text-red-400 mb-1">
+                {tsGalaxyStanding.position === 1 ? 'st' : tsGalaxyStanding.position === 2 ? 'nd' : tsGalaxyStanding.position === 3 ? 'rd' : 'th'}
               </span>
-            ))}
+            </div>
+
+            <p className="text-[10px] font-semibold text-gray-500">Betway Premiership</p>
+
+            <div className="mt-2 pt-2 border-t border-gray-100 flex items-center justify-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-red-500 flex-shrink-0" />
+              <span className="text-[9px] text-gray-400">Current standing</span>
+            </div>
+          </div>
+        </div>
+
+        {/* ── Card 3: Points + Form — desktop only, premium form tracker ── */}
+        <div className="hidden lg:block relative bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+          {/* Red top accent line */}
+          <div className="absolute top-0 left-0 right-0 h-[3px] bg-red-600" />
+
+          {/* Subtle pitch-line stripe pattern */}
+          <div
+            className="absolute inset-0 opacity-[0.025] pointer-events-none"
+            style={{ backgroundImage: 'repeating-linear-gradient(0deg, transparent, transparent 18px, #000 18px, #000 19px)' }}
+            aria-hidden="true"
+          />
+
+          {/* Badge watermark */}
+          <img
+            src={LOGO.badge}
+            alt=""
+            aria-hidden="true"
+            className="absolute -right-3 -bottom-3 w-20 h-20 opacity-[0.05] pointer-events-none select-none"
+          />
+
+          <div className="relative p-5">
+            <div className="flex items-center gap-1 mb-1">
+              <TrendingUp className="w-2.5 h-2.5 text-red-400" aria-hidden="true" />
+              <span className="text-[9px] font-black text-gray-400 uppercase tracking-widest">Points</span>
+            </div>
+
+            <p className="text-5xl font-black text-gray-900 leading-none mt-1 mb-1">{tsGalaxyStanding.points}</p>
+            <p className="text-[10px] text-gray-400 mb-3">After {tsGalaxyStanding.played} games</p>
+
+            <div className="pt-2 border-t border-gray-100">
+              <p className="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1.5">Recent Form</p>
+              <div className="flex gap-1.5" aria-label="Recent form">
+                {(tsGalaxyStanding.form ?? []).map((r, i) => (
+                  <span
+                    key={i}
+                    aria-label={r === 'W' ? 'Win' : r === 'D' ? 'Draw' : 'Loss'}
+                    className={`w-6 h-6 rounded-md text-[10px] font-black flex items-center justify-center text-white shadow-sm ${RESULT_META[r as FormResult].ring}`}
+                  >
+                    {r}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
 
